@@ -28,9 +28,10 @@ pub fn (gpio mut Gpio) export_pin(number string) bool {
 			export_file.close()
 		}
 	}
-	if os.exists("/sys/class/gpio/gpio" + number) {
+	if os.exists("/sys/class/gpio/gpio$number") {
 		pin.exported = true
 	}
+	gpio.pins[number] = pin
 	return pin.exported
 }
 
@@ -47,6 +48,7 @@ pub fn (gpio mut Gpio) unexport_pin(number string) bool {
 		unexport_file.close()
 	}
 	pin.exported = os.exists("/sys/class/gpio/gpio" + number)
+	gpio.pins[number] = pin
 	return pin.exported
 }
 
@@ -62,7 +64,6 @@ pub fn (pin mut Pin) set_direction(direction bool) bool {
 	if pin.exported {
 		path := "/sys/class/gpio/gpio${pin.number.str()}/direction"
 		mut file := os.create(path) or {
-			println("'$path' direction error")
 			return false
 		}
 		if direction {
@@ -93,7 +94,6 @@ pub fn (pin Pin) write(value int) bool {
 	if pin.exported && !pin.direction {
 		path := "/sys/class/gpio/gpio" + pin.number.str() + "/value"
 		mut file := os.create(path) or {
-			println("'$path' error opeining file")
 			return false
 		}
 		file.write(value.str())
