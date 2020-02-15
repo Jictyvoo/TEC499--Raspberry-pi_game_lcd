@@ -19,12 +19,14 @@ pub fn (gpio mut Gpio) export_pin(number string) bool {
 		gpio.pins[number] = Pin{number: number.int()}
 	}
 	mut pin := gpio.pins[number]
-	if os.exists("/sys/class/gpio/export") {
-		mut export_file := os.create("/sys/class/gpio/export") or {
-			return false
+	if !os.exists("/sys/class/gpio/gpio" + number) {
+		if os.exists("/sys/class/gpio/export") {
+			mut export_file := os.create("/sys/class/gpio/export") or {
+				return false
+			}
+			export_file.write(number)
+			export_file.close()
 		}
-		export_file.write(number)
-		export_file.close()
 	}
 	if os.exists("/sys/class/gpio/gpio" + number) {
 		pin.exported = true
@@ -76,7 +78,7 @@ pub fn (pin Pin) read() int {
 	if pin.exported && pin.direction {
 		path := "/sys/class/gpio/gpio" + pin.number.str() + "/value"
 		readed := os.read_file(path) or {
-			return -1
+			return -2
 		}
 		value := readed.int()
 		return value
