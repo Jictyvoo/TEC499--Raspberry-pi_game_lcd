@@ -2,7 +2,7 @@ module rpi_gpio
 
 import os
 
-struct Pin {
+pub struct Pin {
 	mut:
 		number int = 0
 		direction bool = false
