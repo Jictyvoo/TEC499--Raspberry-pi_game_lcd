@@ -15,6 +15,9 @@ pub struct Gpio {
 }
 
 pub fn (gpio mut Gpio) export_pin(number string) bool {
+	if number == "27" || number == "28" {
+		return false
+	}
 	if !(number in gpio.pins) {
 		gpio.pins[number] = Pin{number: number.int()}
 	}
@@ -36,6 +39,9 @@ pub fn (gpio mut Gpio) export_pin(number string) bool {
 }
 
 pub fn (gpio mut Gpio) unexport_pin(number string) bool {
+	if number == "27" || number == "28" {
+		return false
+	}
 	if !(number in gpio.pins) {
 		gpio.pins[number] = Pin{number: number.int()}
 	}
