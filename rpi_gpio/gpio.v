@@ -15,7 +15,7 @@ pub struct Gpio {
 }
 
 pub fn (gpio mut Gpio) export_pin(number string) bool {
-	if number == "27" || number == "28" {
+	if number == "0" || number == "1" {
 		return false
 	}
 	if !(number in gpio.pins) {

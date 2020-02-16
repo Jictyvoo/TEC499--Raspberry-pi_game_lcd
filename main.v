@@ -22,6 +22,8 @@ fn always_read(gpio_23 rpi_gpio.Pin) {
 
 fn main() {
 	mut gpio := rpi_gpio.Gpio{}
+	mut lcd := rpi_gpio.Lcd{}
+	lcd.export_default(gpio)
 	if gpio.export_pin("24") && gpio.export_pin("23") {
 		time.sleep_ms(5)
 		mut gpio_24 := gpio.get_pin("24")
