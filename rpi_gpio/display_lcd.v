@@ -7,7 +7,7 @@ pub struct Lcd {
 		rs Pin
 		rw Pin
 		enable Pin
-		data []Pin = [Pin{}].repeat(8)
+		data [8]rpi_gpio.Pin
 }
 
 fn (lcd mut Lcd) set_direction(direction bool) {
@@ -19,7 +19,7 @@ fn (lcd mut Lcd) set_direction(direction bool) {
 	}
 }
 
-fn (lcd mut Lcd) export_default(gpio mut Gpio) {
+pub fn (lcd mut Lcd) export_default(gpio mut Gpio) {
 	gpio.export_pin("17")
 	lcd.data[0] = gpio.get_pin("17")
 	gpio.export_pin("27")
@@ -39,7 +39,7 @@ fn (lcd mut Lcd) export_default(gpio mut Gpio) {
 	lcd.set_direction(false)
 }
 
-fn (lcd mut Lcd) clear_display() {
+pub fn (lcd mut Lcd) clear_display() {
 	lcd.set_direction(false)
 	lcd.enable.write(1)
 	lcd.rs.write(0)
@@ -49,10 +49,10 @@ fn (lcd mut Lcd) clear_display() {
 	}
 	lcd.data[0].write(1)
 	lcd.enable.write(0)
-	time.sleep_ms(1.6)
+	time.sleep_ms(2)
 }
 
-fn (lcd mut Lcd) home_cursor(b0 int) {
+pub fn (lcd mut Lcd) home_cursor(b0 int) {
 	lcd.set_direction(false)
 	lcd.enable.write(1)
 	lcd.rs.write(0)
@@ -63,10 +63,10 @@ fn (lcd mut Lcd) home_cursor(b0 int) {
 	lcd.data[1].write(1)
 	lcd.data[0].write(b0)
 	lcd.enable.write(0)
-	time.sleep_ms(1.6)
+	time.sleep_ms(2)
 }
 
-fn (lcd mut Lcd) working_mode(x int, s int) {
+pub fn (lcd mut Lcd) working_mode(x int, s int) {
 	lcd.set_direction(false)
 	lcd.enable.write(1)
 	lcd.rs.write(0)
@@ -81,7 +81,7 @@ fn (lcd mut Lcd) working_mode(x int, s int) {
 	time.sleep_ms(1)
 }
 
-fn (lcd mut Lcd) display_controller(d int, c int, b int) {
+pub fn (lcd mut Lcd) display_controller(d int, c int, b int) {
 	lcd.set_direction(false)
 	lcd.enable.write(1)
 	lcd.rs.write(0)
@@ -97,7 +97,7 @@ fn (lcd mut Lcd) display_controller(d int, c int, b int) {
 	time.sleep_ms(1)
 }
 
-fn (lcd mut Lcd) move_cursor_message(c int, r int) {
+pub fn (lcd mut Lcd) move_cursor_message(c int, r int) {
 	lcd.set_direction(false)
 	lcd.enable.write(1)
 	lcd.rs.write(0)
@@ -112,7 +112,7 @@ fn (lcd mut Lcd) move_cursor_message(c int, r int) {
 	time.sleep_ms(1)
 }
 
-fn (lcd mut Lcd) sets_use_mode(y int, n int, f int) {
+pub fn (lcd mut Lcd) sets_use_mode(y int, n int, f int) {
 	lcd.set_direction(false)
 	lcd.enable.write(1)
 	lcd.rs.write(0)
@@ -128,7 +128,7 @@ fn (lcd mut Lcd) sets_use_mode(y int, n int, f int) {
 	time.sleep_ms(1)
 }
 
-fn (lcd mut Lcd) set_cgram_address(b5 int, b4 int, b3 int, b2 int, b1 int, b0 int) {
+pub fn (lcd mut Lcd) set_cgram_address(b5 int, b4 int, b3 int, b2 int, b1 int, b0 int) {
 	lcd.set_direction(false)
 	lcd.enable.write(1)
 	lcd.rs.write(0)
@@ -145,7 +145,7 @@ fn (lcd mut Lcd) set_cgram_address(b5 int, b4 int, b3 int, b2 int, b1 int, b0 in
 	time.sleep_ms(1)
 }
 
-fn (lcd mut Lcd) set_ddram_address(b6 int, b5 int, b4 int, b3 int, b2 int, b1 int, b0 int) {
+pub fn (lcd mut Lcd) set_ddram_address(b6 int, b5 int, b4 int, b3 int, b2 int, b1 int, b0 int) {
 	lcd.set_direction(false)
 	lcd.enable.write(1)
 	lcd.rs.write(0)
@@ -162,7 +162,7 @@ fn (lcd mut Lcd) set_ddram_address(b6 int, b5 int, b4 int, b3 int, b2 int, b1 in
 	time.sleep_ms(1)
 }
 
-fn (lcd mut Lcd) write(b7 int, b6 int, b5 int, b4 int, b3 int, b2 int, b1 int, b0 int) {
+pub fn (lcd mut Lcd) write(b7 int, b6 int, b5 int, b4 int, b3 int, b2 int, b1 int, b0 int) {
 	lcd.set_direction(false)
 	lcd.enable.write(1)
 	lcd.rs.write(0)
@@ -179,7 +179,7 @@ fn (lcd mut Lcd) write(b7 int, b6 int, b5 int, b4 int, b3 int, b2 int, b1 int, b
 	time.sleep_ms(1)
 }
 
-fn (lcd mut Lcd) write(b7 int, b6 int, b5 int, b4 int, b3 int, b2 int, b1 int, b0 int) string {
+pub fn (lcd mut Lcd) read() string {
 	lcd.set_direction(true)
 	lcd.enable.write(1)
 	lcd.rs.write(1)
@@ -194,5 +194,5 @@ fn (lcd mut Lcd) write(b7 int, b6 int, b5 int, b4 int, b3 int, b2 int, b1 int, b
 	b2 := lcd.data[2].read()
 	b1 := lcd.data[1].read()
 	b0 := lcd.data[0].read()
-	return "${7}${6}${5}${4}${3}${2}${1}${0}"
+	return "${b7}${b6}${b5}${b4}${b3}${b2}${b1}${b0}"
 }
