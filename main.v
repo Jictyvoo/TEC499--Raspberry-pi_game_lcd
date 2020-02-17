@@ -20,10 +20,37 @@ fn always_read(gpio_23 rpi_gpio.Pin) {
 	}
 }
 
-fn main() {
-	mut gpio := rpi_gpio.Gpio{}
+fn initialize_lcd(gpio mut rpi_gpio.Gpio) {
+	initial_time := time.ticks()
+	println("Started Initialization")
 	mut lcd := rpi_gpio.Lcd{}
 	lcd.export_default(mut gpio)
+	time.sleep_ms(16)
+	lcd.write_fast(0,0,0,0,1,1,1,0,0,0)
+	time.sleep_ms(15)
+	lcd.write_fast(0,0,0,0,1,1,1,0,0,1)
+	time.sleep_ms(15)
+	lcd.write_fast(0,0,0,0,0,1,0,1,0,0)
+	time.sleep_ms(15)
+	lcd.write_fast(0,0,0,1,0,1,1,1,1,0)
+	time.sleep_ms(15)
+	lcd.write_fast(0,0,0,1,1,0,1,1,0,1)
+	time.sleep_ms(15)
+	lcd.write_fast(0,0,0,1,1,1,0,0,0,0)
+	time.sleep_ms(15)
+	lcd.write_fast(0,0,0,0,0,0,1,1,0,0)
+	time.sleep_ms(15)
+	lcd.write_fast(0,0,0,0,0,0,0,1,1,0)
+	time.sleep_ms(15)
+	lcd.write_fast(0,0,0,0,0,0,0,0,0,1)
+	time.sleep_ms(15)
+	println("Ended initialization after ${time.ticks() - initial_time} ticks")
+	lcd.write(0,1,0,0,1,0,0,0)
+}
+
+fn main() {
+	mut gpio := rpi_gpio.Gpio{}
+	go initialize_lcd(&gpio)
 	if gpio.export_pin("24") && gpio.export_pin("23") {
 		time.sleep_ms(5)
 		mut gpio_24 := gpio.get_pin("24")
