@@ -64,6 +64,24 @@ pub fn (lcd mut Lcd) instruction_4bit(rs int, rw int, b7 int, b6 int, b5 int, b4
 	time.usleep(500)
 }
 
+pub fn (lcd mut Lcd) home_cursor() {
+	lcd.instruction_4bit(0, 0, 0, 0, 0, 0) //return address to home
+	lcd.instruction_4bit(0, 0, 0, 0, 1, 0)
+	time.sleep_ms(3)
+}
+
+pub fn (lcd mut Lcd) shift_cursor(to int) {
+	lcd.instruction_4bit(0, 0, 0, 0, 0, 1) //shift cursor to left
+	lcd.instruction_4bit(0, 0, 0, to, 0, 0)
+	time.sleep_ms(3)
+}
+
+pub fn (lcd mut Lcd) clear_display() {
+	lcd.instruction_4bit(0,0,0,0,0,0)	// Clear Display
+	lcd.instruction_4bit(0,0,0,0,0,1)
+	time.sleep_ms(3)
+}
+
 pub fn (lcd mut Lcd) read() string {
 	lcd.set_direction(true)
 	lcd.enable.write(0)
