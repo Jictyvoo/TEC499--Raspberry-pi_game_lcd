@@ -97,12 +97,12 @@ fn draw_block(lcd mut rpi_gpio.Lcd, size int, start_location int) {
         }
 }
 
-fn always_read(gpio_23 rpi_gpio.Pin) {
+fn always_read(gpio_5 rpi_gpio.Pin) {
         mut counter := 0
         mut state := 0
         mut current_state := 0
         for {
-                current_state = gpio_23.read()
+                current_state = gpio_5.read()
                 if current_state == 1 && current_state != state {
                         counter++
                         println('counter: $counter')
@@ -323,64 +323,59 @@ fn create_character(lcd mut rpi_gpio.Lcd) {
 }
 
 fn press_start(lcd mut rpi_gpio.Lcd) {
+        println("Press Start")
         lcd.clear_display()
         lcd.home_cursor()
         /* Write P */
-
-        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 1)
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         time.usleep(3000)
-        lcd.shift_cursor(1)
         /* Write R */
 
-        lcd.instruction_4bit(1, 0, 0, 0, 1, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 1)
+        lcd.instruction_4bit(1, 0, 0, 0, 1, 0)
         time.usleep(3000)
-        lcd.shift_cursor(1)
         /* Write E */
 
-        lcd.instruction_4bit(1, 0, 0, 1, 0, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 0)
+        lcd.instruction_4bit(1, 0, 0, 1, 0, 1)
         time.usleep(3000)
-        lcd.shift_cursor(1)
         /* Write S */
 
-        lcd.instruction_4bit(1, 0, 0, 0, 1, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 1)
+        lcd.instruction_4bit(1, 0, 0, 0, 1, 1)
         time.usleep(3000)
-        lcd.shift_cursor(1)
         /* Write S */
 
-        lcd.instruction_4bit(1, 0, 0, 0, 1, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 1)
+        lcd.instruction_4bit(1, 0, 0, 0, 1, 1)
         time.usleep(3000)
-        lcd.shift_cursor(1)
         lcd.shift_cursor(1)/* White Space */
 
         /* Write S */
 
-        lcd.instruction_4bit(1, 0, 0, 0, 1, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 1)
+        lcd.instruction_4bit(1, 0, 0, 0, 1, 1)
         time.usleep(3000)
         /* Write T */
 
-        lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 1)
+        lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
         time.usleep(3000)
         /* Write A */
 
-        lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 0)
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
         time.usleep(3000)
         /* Write R */
 
-        lcd.instruction_4bit(1, 0, 0, 0, 1, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 1)
+        lcd.instruction_4bit(1, 0, 0, 0, 1, 0)
         time.usleep(3000)
         /* Write T */
 
-        lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 1)
+        lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
         time.usleep(3000)
 }
 
@@ -388,14 +383,19 @@ fn main() {
         mut gpio := rpi_gpio.Gpio{}
         mut lcd := initialize_lcd(mut gpio)
         create_character(mut lcd)
-        mut initialized := gpio.export_pin('24')
-        initialized = initialized && gpio.export_pin('23')
-        println('Exported pin 24 && 23: ${initialized}')
+        mut initialized := gpio.export_pin('26')
+        initialized = initialized && gpio.export_pin('19')
+        initialized = initialized && gpio.export_pin('5')
+        println('Exported pin 26 && 19 && 5: ${initialized}')
         time.sleep_ms(5)
-        mut gpio_24 := gpio.get_pin('24')
-        mut gpio_23 := gpio.get_pin('23')
-        gpio_24.set_direction(true)
-        gpio_23.set_direction(true)
+        mut gpio_26 := gpio.get_pin('26')
+        mut gpio_19 := gpio.get_pin('19')
+        gpio_5 := gpio.get_pin('5')
+        go always_read(gpio_5)
+        go always_read(gpio_19)
+        go always_read(gpio_26)
+        gpio_26.set_direction(true)
+        gpio_19.set_direction(true)
         mut previous_tick := time.ticks()
         mut score := 0
         mut player_y := false
@@ -407,7 +407,7 @@ fn main() {
         for {
                 if game_state == 0 {
                         press_start(mut lcd)
-                        if gpio_23.read() == 1 {
+                        if gpio_19.read() == 1 {
                                 game_state = 1
                         }
                 }
@@ -419,7 +419,7 @@ fn main() {
                                 blocks_position++
                                 change_sprite = !change_sprite
                         }
-                        if gpio_24.read() == 1 {
+                        if gpio_26.read() == 1 {
                                 player_y = true/* still needs verify gravity */
 
                                 time_in_air = time.ticks()
@@ -444,7 +444,7 @@ fn main() {
                         }
                 }
                 else if game_state == 2 {
-                        if gpio_23.read() == 1 {
+                        if gpio_19.read() == 1 {
                                 game_state = 1
                         }
                 }

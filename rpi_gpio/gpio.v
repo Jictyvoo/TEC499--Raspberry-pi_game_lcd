@@ -5,6 +5,7 @@ import os
 pub struct Pin {
 	mut:
 		number int = 0
+		setted bool = false
 		direction bool = false
 		exported bool = false
 }
@@ -67,7 +68,7 @@ pub fn (gpio Gpio) get_pin(number string) Pin {
 
 /*true - in | false - out*/
 pub fn (pin mut Pin) set_direction(direction bool) bool {
-	if pin.exported {
+	if pin.exported && ((pin.setted && pin.direction != direction) || pin.setted == false) {
 		path := "/sys/class/gpio/gpio${pin.number.str()}/direction"
 		mut file := os.create(path) or {
 			return false
@@ -79,6 +80,7 @@ pub fn (pin mut Pin) set_direction(direction bool) bool {
 		}
 		file.close()
 		pin.direction = direction
+		pin.setted = true
 		return true
 	}
 	return false
