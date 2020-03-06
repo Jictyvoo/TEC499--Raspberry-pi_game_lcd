@@ -57,6 +57,33 @@ fn generate_block() int {
         return rand.next(3) + 1
 }
 
+fn draw_character(lcd mut rpi_gpio.Lcd, player_y bool, change_sprite bool) {
+        lcd.home_cursor()
+        /* se estiver no solo, player_y e negado */
+        if !player_y {
+                /* mover para terceira casa da linha debaixo */
+                for counter := 0; counter < 19; counter++ {
+                        lcd.shift_cursor(1)
+                }
+                /* seleciona o char do movimento */
+                if change_sprite {
+                        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+                        lcd.instruction_4bit(1, 0, 0, 0, 0, 0) /* CGRAM 1 */
+                }
+                else {
+                        lcd.instruction_4bit(1, 0, 0, 0, 1, 0)
+                        lcd.instruction_4bit(1, 0, 0, 0, 0, 0) /* CGRAM 3 */
+                }
+        }
+        else {
+                for counter := 0; counter < 4; counter++ {
+                        lcd.shift_cursor(1)
+                }
+                lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
+                lcd.instruction_4bit(1, 0, 0, 0, 0, 0) /* CGRAM 2 */
+        }
+}
+
 fn draw_block(lcd mut rpi_gpio.Lcd, size int, start_location int) {
         lcd.home_cursor()
         lcd.shift_cursor(0)
@@ -376,6 +403,7 @@ fn main() {
         mut blocks_position := 0
         mut blocks_size := generate_block()
         mut game_state := 0
+        mut change_sprite := false
         for {
                 if game_state == 0 {
                         press_start(mut lcd)
@@ -389,6 +417,7 @@ fn main() {
                                 previous_tick = time.ticks()
                                 println(score)
                                 blocks_position++
+                                change_sprite = !change_sprite
                         }
                         if gpio_24.read() == 1 {
                                 player_y = true/* still needs verify gravity */
@@ -411,6 +440,7 @@ fn main() {
                                 /* main game logic */
                                 lcd.clear_display()
                                 draw_block(mut lcd, blocks_size, blocks_position)
+                                draw_character(mut lcd, player_y, change_sprite)
                         }
                 }
                 else if game_state == 2 {
