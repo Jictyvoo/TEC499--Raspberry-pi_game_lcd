@@ -6,6 +6,45 @@ import rpi_gpio
 
 //#flag -O3
 
+fn number_conversor(index int) []int {
+    array_number := [[0,0,0,0,0,0,1,1], [0,0,0,1,0,0,1,1], 
+                     [0,0,1,0,0,0,1,1], [0,0,1,1,0,0,1,1],
+                     [0,1,0,0,0,0,1,1], [0,1,0,1,0,0,1,1],
+                     [0,1,1,1,0,0,1,1], [0,1,1,1,0,0,1,1],
+                     [1,0,0,0,0,0,1,1], [1,0,0,1,0,0,1,1]]//each position means the number on hexadecimal
+
+    return array_number[index]
+}
+
+fn print_number(number int, lcd mut rpi_gpio.Lcd){
+    if number <= 9 {
+        array := number_conversor(number)
+        lcd.instruction_4bit(1, 0, array[0], array[1], array[2], array[3])//MSB
+        lcd.instruction_4bit(1, 0, array[4], array[5], array[6], array[7])//LSB
+    } else{
+		temp_string := number.str()
+        cut_1 := temp_string[0..temp_string.len - 1] //get the first number
+        cut_2 := temp_string[1..temp_string.len]     //get the last number
+
+        mut array := number_conversor(cut_1.int())
+        lcd.instruction_4bit(1, 0, array[0], array[1], array[2], array[3])//MSB
+        lcd.instruction_4bit(1, 0, array[4], array[5], array[6], array[7])//LSB
+
+        lcd.shift_cursor(1)//move to right
+
+        array = number_conversor(cut_2.int())
+        lcd.instruction_4bit(1, 0, array[0], array[1], array[2], array[3])//MSB
+        lcd.instruction_4bit(1, 0, array[4], array[5], array[6], array[7])//LSB
+    }
+}
+
+fn score_counter(previous_tick i64) bool {
+	if (time.ticks() - previous_tick) >= 400 {
+		return true
+	}
+	return false
+}
+
 fn generate_block() int {
 	rand.seed(int(time.ticks()))
 	return rand.next(3)
@@ -91,7 +130,13 @@ fn main() {
 	mut gpio_23 := gpio.get_pin("23")
 	gpio_24.set_direction(false)
 	gpio_23.set_direction(true)
+	mut previous_tick := time.ticks()
+	mut score := 0
 	for {
-
+		if score_counter(previous_tick) {
+			score++
+			previous_tick = time.ticks()
+			println(score)
+		}
 	}
 }
