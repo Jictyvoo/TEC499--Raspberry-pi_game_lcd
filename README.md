@@ -7,7 +7,7 @@
 ```shell
     v -o main.out .
 ```
-* Execute
+* Execute - Simply Execute
 
 ## Team
 
