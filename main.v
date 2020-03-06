@@ -83,7 +83,7 @@ fn initialize_lcd(gpio mut rpi_gpio.Gpio) rpi_gpio.Lcd {
         return lcd
 }
 
-fn create_char(lcd mut rpi_gpio.Lcd) {
+fn create_character(lcd mut rpi_gpio.Lcd) {
         // Addres Code - 40
 		lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(0, 0, 0, 0, 0, 0)
@@ -194,6 +194,7 @@ fn press_start(lcd mut rpi_gpio.Lcd) {
 fn main() {
         mut gpio := rpi_gpio.Gpio{}
         mut lcd := initialize_lcd(mut gpio)
+		create_character(mut lcd)
         mut initialized := gpio.export_pin('24')
         initialized = initialized && gpio.export_pin('23')
         println('Exported pin 24 && 23: ${initialized}')
@@ -236,14 +237,14 @@ fn main() {
                                 blocks_size = generate_block()
                         }
                         if blocks_position == 14 && !player_y {
-                                game_state = 3
+                                game_state = 2
                         }
                         else {// main game logic
 								lcd.clear_display()
                                 draw_block(mut lcd, blocks_size, blocks_position)
                         }
                 }
-                else if game_state == 3 {
+                else if game_state == 2 {
                         if gpio_23.read() == 1 {
                                 game_state = 1
                         }
