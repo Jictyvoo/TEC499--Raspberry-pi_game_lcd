@@ -3,33 +3,45 @@ module main
 import time
 import rand
 import rpi_gpio
-// #flag -O3
+/* #flag -O3 */
+
+
 fn number_conversor(index int) []int {
         array_number := [[0, 0, 0, 0, 0, 0, 1, 1], [0, 0, 0, 1, 0, 0, 1, 1],
         [0, 0, 1, 0, 0, 0, 1, 1], [0, 0, 1, 1, 0, 0, 1, 1],
         [0, 1, 0, 0, 0, 0, 1, 1], [0, 1, 0, 1, 0, 0, 1, 1],
         [0, 1, 1, 1, 0, 0, 1, 1], [0, 1, 1, 1, 0, 0, 1, 1],
-        [1, 0, 0, 0, 0, 0, 1, 1], [1, 0, 0, 1, 0, 0, 1, 1]] // each position means the number on hexadecimal
+        [1, 0, 0, 0, 0, 0, 1, 1], [1, 0, 0, 1, 0, 0, 1, 1]]/* each position means the number on hexadecimal */
+
         return array_number[index]
 }
 
 fn print_number(number int, lcd mut rpi_gpio.Lcd) {
         if number <= 9 {
                 array := number_conversor(number)
-                lcd.instruction_4bit(1, 0, array[0], array[1], array[2], array[3]) // MSB
-                lcd.instruction_4bit(1, 0, array[4], array[5], array[6], array[7]) // LSB
+                lcd.instruction_4bit(1, 0, array[0], array[1], array[2], array[3])/* MSB */
+
+                lcd.instruction_4bit(1, 0, array[4], array[5], array[6], array[7])/* LSB */
+
         }
         else {
                 temp_string := number.str()
-                cut_1 := temp_string[0..temp_string.len - 1] // get the first number
-                cut_2 := temp_string[1..temp_string.len] // get the last number
+                cut_1 := temp_string[0..temp_string.len - 1]/* get the first number */
+
+                cut_2 := temp_string[1..temp_string.len]/* get the last number */
+
                 mut array := number_conversor(cut_1.int())
-                lcd.instruction_4bit(1, 0, array[0], array[1], array[2], array[3]) // MSB
-                lcd.instruction_4bit(1, 0, array[4], array[5], array[6], array[7]) // LSB
-                lcd.shift_cursor(1) // move to right
+                lcd.instruction_4bit(1, 0, array[0], array[1], array[2], array[3])/* MSB */
+
+                lcd.instruction_4bit(1, 0, array[4], array[5], array[6], array[7])/* LSB */
+
+                lcd.shift_cursor(1)/* move to right */
+
                 array = number_conversor(cut_2.int())
-                lcd.instruction_4bit(1, 0, array[0], array[1], array[2], array[3]) // MSB
-                lcd.instruction_4bit(1, 0, array[4], array[5], array[6], array[7]) // LSB
+                lcd.instruction_4bit(1, 0, array[0], array[1], array[2], array[3])/* MSB */
+
+                lcd.instruction_4bit(1, 0, array[4], array[5], array[6], array[7])/* LSB */
+
         }
 }
 
@@ -84,108 +96,196 @@ fn initialize_lcd(gpio mut rpi_gpio.Gpio) rpi_gpio.Lcd {
 }
 
 fn create_character(lcd mut rpi_gpio.Lcd) {
-        // Addres Code - 40
-		lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
+        /*WALKING */
+
+        /*Addres Code - 40 */
+        lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(0, 0, 0, 0, 0, 0)
-        // Draw first line for CGRAM
+        /*Draw first line for CGRAM */
+
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 1, 1, 1, 0)
-        // Addres Code - 41
+        /*Addres Code - 41 */
+
         lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(0, 0, 0, 0, 0, 1)
-        // Draw second line for CGRAM
+        /*Draw second line for CGRAM */
+
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 1, 1, 1, 0)
-        // Addres Code - 42
+        /*Addres Code - 42 */
+
         lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(0, 0, 0, 0, 1, 0)
-        // Draw third line for CGRAM
+        /*Draw third line for CGRAM */
+
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
-        // Addres Code - 43
+        /*Addres Code - 43 */
+
         lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(0, 0, 0, 0, 1, 1)
-        // Draw forth line for CGRAM
+        /*Draw forth line for CGRAM */
+
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 1, 1, 0, 0)
-        // Addres Code - 44
+        /*Addres Code - 44 */
+
         lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
-        // Draw fifth line for CGRAM
+        /*Draw fifth line for CGRAM */
+
         lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 0)
-        // Addres Code - 45
+        /*Addres Code - 45 */
+
         lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(0, 0, 1, 0, 0, 1)
-        // Draw sixth line for CGRAM
-        lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
+        /*Draw sixth line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 1)
-        // Addres Code - 46
+        /*Addres Code - 46 */
+
         lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(0, 0, 0, 1, 1, 0)
-        // Draw sixth line for CGRAM
+        /*Draw seventh line for CGRAM */
+
         lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
         lcd.instruction_4bit(1, 0, 1, 0, 1, 0)
-        // Addres Code - 47
+        /*Addres Code - 47 */
+
         lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(0, 0, 0, 1, 1, 1)
-        // Draw seventh line for CGRAM
+        /*Draw eighth line for CGRAM */
+
         lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
         lcd.instruction_4bit(1, 0, 1, 0, 1, 0)
-        // Addres Code - 48
+        /*Jumping */
+
+        /*Addres Code - 48 */
+
         lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(0, 0, 1, 0, 0, 0)
-        // Draw seventh line for CGRAM
+        /*Draw first line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(1, 0, 1, 1, 1, 0)
+        /*Addres Code - 49 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
+        lcd.instruction_4bit(0, 0, 1, 0, 0, 1)
+        /*Draw second line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(1, 0, 1, 1, 1, 0)
+        /*Addres Code - 50 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
+        lcd.instruction_4bit(0, 0, 0, 0, 0, 0)
+        /*Draw third line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
+        /*Addres Code - 51 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
+        lcd.instruction_4bit(0, 0, 0, 0, 0, 1)
+        /*Draw forth line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(1, 0, 1, 1, 1, 0)
+        /*Addres Code - 52 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
+        lcd.instruction_4bit(0, 0, 0, 0, 1, 0)
+        /*Draw fifth line for CGRAM */
+
         lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
-        lcd.instruction_4bit(1, 0, 0, 0, 1, 1)
+        lcd.instruction_4bit(1, 0, 0, 1, 0, 1)
+        /*Addres Code - 53 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
+        lcd.instruction_4bit(0, 0, 0, 0, 1, 1)
+        /*Draw sixth line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
+        /*Addres Code - 54 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
+        lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
+        /*Draw seventh line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(1, 0, 1, 0, 1, 0)
+        /*Addres Code - 55 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
+        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
+        /*Draw eighth line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
+        lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
 }
 
 fn press_start(lcd mut rpi_gpio.Lcd) {
         lcd.clear_display()
         lcd.home_cursor()
-        // Write P
+        /* Write P */
+
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 1)
         time.usleep(3000)
         lcd.shift_cursor(1)
-        // Write R
+        /* Write R */
+
         lcd.instruction_4bit(1, 0, 0, 0, 1, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 1)
         time.usleep(3000)
         lcd.shift_cursor(1)
-        // Write E
+        /* Write E */
+
         lcd.instruction_4bit(1, 0, 0, 1, 0, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 0)
         time.usleep(3000)
         lcd.shift_cursor(1)
-        // Write S
+        /* Write S */
+
         lcd.instruction_4bit(1, 0, 0, 0, 1, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 1)
         time.usleep(3000)
         lcd.shift_cursor(1)
-        // Write S
+        /* Write S */
+
         lcd.instruction_4bit(1, 0, 0, 0, 1, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 1)
         time.usleep(3000)
         lcd.shift_cursor(1)
-        lcd.shift_cursor(1) // White Space
-        // Write S
+        lcd.shift_cursor(1)/* White Space */
+
+        /* Write S */
+
         lcd.instruction_4bit(1, 0, 0, 0, 1, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 1)
         time.usleep(3000)
-        // Write T
+        /* Write T */
+
         lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 1)
         time.usleep(3000)
-        // Write A
+        /* Write A */
+
         lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 0)
         time.usleep(3000)
-        // Write R
+        /* Write R */
+
         lcd.instruction_4bit(1, 0, 0, 0, 1, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 1)
         time.usleep(3000)
-        // Write T
+        /* Write T */
+
         lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 1)
         time.usleep(3000)
@@ -194,7 +294,7 @@ fn press_start(lcd mut rpi_gpio.Lcd) {
 fn main() {
         mut gpio := rpi_gpio.Gpio{}
         mut lcd := initialize_lcd(mut gpio)
-		create_character(mut lcd)
+        create_character(mut lcd)
         mut initialized := gpio.export_pin('24')
         initialized = initialized && gpio.export_pin('23')
         println('Exported pin 24 && 23: ${initialized}')
@@ -225,11 +325,13 @@ fn main() {
                                 blocks_position++
                         }
                         if gpio_24.read() == 1 {
-                                player_y = true // still needs verify gravity
+                                player_y = true/* still needs verify gravity */
+
                                 time_in_air = time.ticks()
                         }
-                        if player_y && time.ticks() - time_in_air > 140 {// gravity
-								time_in_air = 0
+                        if player_y && time.ticks() - time_in_air > 140 {
+                                /* gravity */
+                                time_in_air = 0
                                 player_y = false
                         }
                         if blocks_position >= 16 + blocks_size {
@@ -239,8 +341,9 @@ fn main() {
                         if blocks_position == 14 && !player_y {
                                 game_state = 2
                         }
-                        else {// main game logic
-								lcd.clear_display()
+                        else {
+                                /* main game logic */
+                                lcd.clear_display()
                                 draw_block(mut lcd, blocks_size, blocks_position)
                         }
                 }
