@@ -227,6 +227,72 @@ fn create_character(lcd mut rpi_gpio.Lcd) {
 
         lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
+        /*WALKING 2 */
+
+        /*Addres Code - 56 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
+        lcd.instruction_4bit(0, 0, 0, 1, 1, 0)
+        /*Draw first line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(1, 0, 1, 1, 1, 0)
+        /*Addres Code - 57 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
+        lcd.instruction_4bit(0, 0, 0, 1, 1, 1)
+        /*Draw second line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(1, 0, 1, 1, 1, 0)
+        /*Addres Code - 58 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
+        lcd.instruction_4bit(0, 0, 1, 0, 0, 0)
+        /*Draw third line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
+        /*Addres Code - 59 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
+        lcd.instruction_4bit(0, 0, 1, 0, 0, 1)
+        /*Draw forth line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(1, 0, 0, 1, 1, 0)
+        /*Addres Code - 60 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 1, 0)
+        lcd.instruction_4bit(0, 0, 0, 0, 0, 0)
+        /*Draw fifth line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(1, 0, 0, 1, 1, 0)
+        /*Addres Code - 61 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 1, 0)
+        lcd.instruction_4bit(0, 0, 0, 0, 0, 1)
+        /*Draw sixth line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
+        /*Addres Code - 62 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 1, 0)
+        lcd.instruction_4bit(0, 0, 0, 0, 1, 0)
+        /*Draw seventh line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(1, 0, 1, 0, 1, 0)
+        /*Addres Code - 63 */
+
+        lcd.instruction_4bit(0, 0, 0, 1, 1, 0)
+        lcd.instruction_4bit(0, 0, 0, 0, 1, 1)
+        /*Draw eighth line for CGRAM */
+
+        lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
+        lcd.instruction_4bit(1, 0, 0, 0, 1, 0)
 }
 
 fn press_start(lcd mut rpi_gpio.Lcd) {
