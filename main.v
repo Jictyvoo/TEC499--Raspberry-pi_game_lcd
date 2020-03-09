@@ -97,7 +97,7 @@ fn draw_block(lcd mut rpi_gpio.Lcd, size int, start_location int) {
         }
 }
 
-fn always_read(gpio_5 rpi_gpio.Pin) {
+fn always_read(gpio_5 rpi_gpio.Pin, name string) {
         mut counter := 0
         mut state := 0
         mut current_state := 0
@@ -105,7 +105,7 @@ fn always_read(gpio_5 rpi_gpio.Pin) {
                 current_state = gpio_5.read()
                 if current_state == 1 && current_state != state {
                         counter++
-                        println('counter: $counter')
+                        println('gpio_$name counter: $counter')
                 }
                 state = current_state
                 time.sleep_ms(10)
@@ -390,10 +390,13 @@ fn main() {
         time.sleep_ms(5)
         mut gpio_26 := gpio.get_pin('26')
         mut gpio_19 := gpio.get_pin('19')
-        gpio_5 := gpio.get_pin('5')
-        go always_read(gpio_5)
-        go always_read(gpio_19)
-        go always_read(gpio_26)
+        mut gpio_5 := gpio.get_pin('5')
+        gpio_19.set_direction(true)
+        gpio_19.set_direction(true)
+        gpio_5.set_direction(true)
+        go always_read(gpio_5, '5')
+        go always_read(gpio_19, '19')
+        go always_read(gpio_26, '26')
         gpio_26.set_direction(true)
         gpio_19.set_direction(true)
         mut previous_tick := time.ticks()
@@ -404,9 +407,23 @@ fn main() {
         mut blocks_size := generate_block()
         mut game_state := 0
         mut change_sprite := false
+        mut temp_int := 0
+        mut temp_bool := false
         for {
                 if game_state == 0 {
-                        press_start(mut lcd)
+                        if score_counter(previous_tick) {
+                                temp_int++
+                                previous_tick = time.ticks()
+                        }
+                        if temp_int >= 3 {
+                                if temp_bool {
+                                        press_start(mut lcd)
+                                } else {
+                                        lcd.clear_display()
+                                }
+                                temp_int = 0
+                                temp_bool = !temp_bool
+                        }
                         if gpio_19.read() == 1 {
                                 game_state = 1
                         }
