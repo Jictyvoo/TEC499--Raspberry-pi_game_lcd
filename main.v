@@ -7,11 +7,13 @@ import rpi_gpio
 
 
 fn number_conversor(index int) []int {
-        array_number := [[0, 0, 0, 0, 0, 0, 1, 1], [0, 0, 0, 1, 0, 0, 1, 1],
-        [0, 0, 1, 0, 0, 0, 1, 1], [0, 0, 1, 1, 0, 0, 1, 1],
-        [0, 1, 0, 0, 0, 0, 1, 1], [0, 1, 0, 1, 0, 0, 1, 1],
-        [0, 1, 1, 1, 0, 0, 1, 1], [0, 1, 1, 1, 0, 0, 1, 1],
-        [1, 0, 0, 0, 0, 0, 1, 1], [1, 0, 0, 1, 0, 0, 1, 1]]/* each position means the number on hexadecimal */
+        array_number := [
+                [0, 0, 1, 1, 0, 0, 0, 0], [0, 0, 1, 1, 0, 0, 0, 1],
+                [0, 0, 1, 1, 0, 0, 1, 0], [0, 0, 1, 1, 0, 0, 1, 1],
+                [0, 0, 1, 1, 0, 1, 0, 0], [0, 0, 1, 1, 0, 1, 0, 1],
+                [0, 0, 1, 1, 0, 1, 1, 1], [0, 0, 1, 1, 0, 1, 1, 1],
+                [0, 0, 1, 1, 1, 0, 0, 0], [0, 0, 1, 1, 1, 0, 0, 1]
+        ]/* each position means the number on hexadecimal */
 
         return array_number[index]
 }
@@ -20,28 +22,19 @@ fn print_number(number int, lcd mut rpi_gpio.Lcd) {
         if number <= 9 {
                 array := number_conversor(number)
                 lcd.instruction_4bit(1, 0, array[0], array[1], array[2], array[3])/* MSB */
-
                 lcd.instruction_4bit(1, 0, array[4], array[5], array[6], array[7])/* LSB */
-
         }
         else {
                 temp_string := number.str()
                 cut_1 := temp_string[0..temp_string.len - 1]/* get the first number */
-
                 cut_2 := temp_string[1..temp_string.len]/* get the last number */
 
                 mut array := number_conversor(cut_1.int())
                 lcd.instruction_4bit(1, 0, array[0], array[1], array[2], array[3])/* MSB */
-
                 lcd.instruction_4bit(1, 0, array[4], array[5], array[6], array[7])/* LSB */
-
-                lcd.shift_cursor(1)/* move to right */
-
                 array = number_conversor(cut_2.int())
                 lcd.instruction_4bit(1, 0, array[0], array[1], array[2], array[3])/* MSB */
-
                 lcd.instruction_4bit(1, 0, array[4], array[5], array[6], array[7])/* LSB */
-
         }
 }
 
@@ -54,16 +47,16 @@ fn score_counter(previous_tick i64) bool {
 
 fn generate_block() int {
         rand.seed(int(time.ticks()))
-        return rand.next(3) + 1
+        return rand.next(3) + 3
 }
 
 fn draw_character(lcd mut rpi_gpio.Lcd, player_y bool, change_sprite bool) {
         lcd.home_cursor()
-        println('Draw Character')
+        //println('Draw Character')
         /* se estiver no solo, player_y e negado */
         if !player_y {
                 /* mover para terceira casa da linha debaixo */
-                for counter := 0; counter < 19; counter++ {
+                for counter := 0; counter < 44; counter++ {
                         lcd.shift_cursor(1)
                 }
                 /* seleciona o char do movimento */
@@ -72,40 +65,38 @@ fn draw_character(lcd mut rpi_gpio.Lcd, player_y bool, change_sprite bool) {
                         lcd.instruction_4bit(1, 0, 0, 0, 0, 0) /* CGRAM 1 */
                 }
                 else {
-                        lcd.instruction_4bit(1, 0, 0, 0, 1, 0)
-                        lcd.instruction_4bit(1, 0, 0, 0, 0, 0) /* CGRAM 3 */
+                        lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+                        lcd.instruction_4bit(1, 0, 0, 0, 1, 0) /* CGRAM 3 */
                 }
         }
         else {
                 for counter := 0; counter < 4; counter++ {
                         lcd.shift_cursor(1)
                 }
-                lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
-                lcd.instruction_4bit(1, 0, 0, 0, 0, 0) /* CGRAM 2 */
+                lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
+                lcd.instruction_4bit(1, 0, 0, 0, 0, 1) /* CGRAM 2 */
         }
 }
 
 fn draw_block(lcd mut rpi_gpio.Lcd, size int, start_location int) {
         lcd.home_cursor()
-        println('Draw Block')
-        lcd.instruction_4bit(0, 0, 0, 0, 0, 0)
-        lcd.instruction_4bit(0, 0, 1, 1, 1, 1)
-        for counter := 0; counter < 100; counter++{
-                println("drawing $counter")
+        //println('Draw Block')
+        /*lcd.instruction_4bit(0, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(0, 0, 1, 1, 1, 1) Draw Cursor*/
+        for counter := 0; counter < 56; counter++{
                 lcd.shift_cursor(1)
-                time.sleep_ms(500)
         }
         lcd.instruction_4bit(1, 0, 1, 1, 1, 1)
         lcd.instruction_4bit(1, 0, 1, 1, 1, 1)
-        /*
+        
         for counter := 0; counter < start_location; counter++ {
                 lcd.shift_cursor(0)
         }
         for counter := 0; counter <= size; counter++ {
                 lcd.instruction_4bit(1, 0, 1, 1, 1, 1)
                 lcd.instruction_4bit(1, 0, 1, 1, 1, 1)
-                lcd.shift_cursor(0)
-        }*/
+                /*lcd.shift_cursor(0)*/
+        }
 }
 
 fn always_read(gpio_pin rpi_gpio.Pin, name string) {
@@ -121,6 +112,15 @@ fn always_read(gpio_pin rpi_gpio.Pin, name string) {
                 state = current_state
                 time.sleep_ms(10)
         }
+}
+
+fn draw_score(score int, lcd mut rpi_gpio.Lcd) {
+        //println("Drawing Score")
+        lcd.home_cursor()
+        for counter := 0; counter < 14; counter++ {
+                lcd.shift_cursor(1)
+        }
+        print_number(score, mut lcd)
 }
 
 fn initialize_lcd(gpio mut rpi_gpio.Gpio) rpi_gpio.Lcd {
@@ -334,7 +334,7 @@ fn create_character(lcd mut rpi_gpio.Lcd) {
 }
 
 fn press_start(lcd mut rpi_gpio.Lcd) {
-        println("Press Start")
+        //println("Press Start")
         lcd.clear_display()
         lcd.home_cursor()
         /* Write P */
@@ -420,6 +420,8 @@ fn main() {
         mut change_sprite := false
         mut temp_int := 0
         mut temp_bool := false
+        mut paused := false
+        mut pause_pressed := false
         for {
                 if game_state == 0 {
                         if score_counter(previous_tick) {
@@ -440,36 +442,45 @@ fn main() {
                         }
                 }
                 else if game_state == 1 {
-                        if score_counter(previous_tick) {
-                                score++
-                                previous_tick = time.ticks()
-                                println(score)
-                                blocks_position++
-                                change_sprite = !change_sprite
+                        temp_bool = gpio_19.read() == 0
+                        if temp_bool && temp_bool != pause_pressed {
+                                paused = !paused
                         }
-                        if gpio_5.read() == 0 {
-                                player_y = true/* still needs verify gravity */
-
-                                time_in_air = time.ticks()
+                        pause_pressed = temp_bool
+                        if !paused {
+                                if score_counter(previous_tick) {
+                                        score++
+                                        if score > 99 {
+                                                score = 0
+                                        }
+                                        previous_tick = time.ticks()
+                                        blocks_position++
+                                        change_sprite = !change_sprite
+                                }
+                                if gpio_5.read() == 0 {
+                                        player_y = true/* still needs verify gravity */
+                                        time_in_air = time.ticks()
+                                }
+                                if player_y && time.ticks() - time_in_air > 140 {
+                                        /* gravity */
+                                        time_in_air = 0
+                                        player_y = false
+                                }
+                                if blocks_position >= 16 + blocks_size {
+                                        blocks_position = 0
+                                        blocks_size = generate_block()
+                                }
+                                if blocks_position == 14 && !player_y {
+                                        game_state = 0
+                                        score = 0
+                                }
                         }
-                        if player_y && time.ticks() - time_in_air > 140 {
-                                /* gravity */
-                                time_in_air = 0
-                                player_y = false
-                        }
-                        if blocks_position >= 16 + blocks_size {
-                                blocks_position = 0
-                                blocks_size = generate_block()
-                        }
-                        if blocks_position == 14 && !player_y {
-                                game_state = 2
-                        }
-                
                         /* main game logic */
                         lcd.clear_display()
-                        draw_block(mut lcd, blocks_size, blocks_position)
+                        draw_score(score, mut lcd)
                         draw_character(mut lcd, player_y, change_sprite)
-                
+                        draw_block(mut lcd, blocks_size, blocks_position)
+                        time.sleep_ms(300)
                 }
                 else if game_state == 2 {
                         if gpio_5.read() == 0 {
