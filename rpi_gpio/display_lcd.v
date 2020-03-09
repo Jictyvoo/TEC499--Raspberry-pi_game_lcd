@@ -122,7 +122,7 @@ pub fn (lcd mut Lcd) initialize_4bit() {
 	lcd.instruction_4bit(0,0,1,0,0,0)	// Real Function Set 8H
 	time.usleep(100)	// in microseconds
 	lcd.instruction_4bit(0,0,0,0,0,0)	// Real Function Set 0H
-	lcd.instruction_4bit(0,0,0,0,0,1)	// Real Function Set 8H
+	lcd.instruction_4bit(0,0,0,0,0,1)	// Real Function Set 1H
 	time.usleep(3000)	// in miliseconds
 	lcd.instruction_4bit(0,0,0,0,0,0)	// Real Function Set 0H
 	lcd.instruction_4bit(0,0,0,1,1,0)	// Real Function Set 6H

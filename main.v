@@ -59,6 +59,7 @@ fn generate_block() int {
 
 fn draw_character(lcd mut rpi_gpio.Lcd, player_y bool, change_sprite bool) {
         lcd.home_cursor()
+        println('Draw Character')
         /* se estiver no solo, player_y e negado */
         if !player_y {
                 /* mover para terceira casa da linha debaixo */
@@ -86,7 +87,17 @@ fn draw_character(lcd mut rpi_gpio.Lcd, player_y bool, change_sprite bool) {
 
 fn draw_block(lcd mut rpi_gpio.Lcd, size int, start_location int) {
         lcd.home_cursor()
-        lcd.shift_cursor(0)
+        println('Draw Block')
+        lcd.instruction_4bit(0, 0, 0, 0, 0, 0)
+        lcd.instruction_4bit(0, 0, 1, 1, 1, 1)
+        for counter := 0; counter < 100; counter++{
+                println("drawing $counter")
+                lcd.shift_cursor(1)
+                time.sleep_ms(500)
+        }
+        lcd.instruction_4bit(1, 0, 1, 1, 1, 1)
+        lcd.instruction_4bit(1, 0, 1, 1, 1, 1)
+        /*
         for counter := 0; counter < start_location; counter++ {
                 lcd.shift_cursor(0)
         }
@@ -94,15 +105,15 @@ fn draw_block(lcd mut rpi_gpio.Lcd, size int, start_location int) {
                 lcd.instruction_4bit(1, 0, 1, 1, 1, 1)
                 lcd.instruction_4bit(1, 0, 1, 1, 1, 1)
                 lcd.shift_cursor(0)
-        }
+        }*/
 }
 
-fn always_read(gpio_5 rpi_gpio.Pin, name string) {
+fn always_read(gpio_pin rpi_gpio.Pin, name string) {
         mut counter := 0
         mut state := 0
         mut current_state := 0
         for {
-                current_state = gpio_5.read()
+                current_state = gpio_pin.read()
                 if current_state == 1 && current_state != state {
                         counter++
                         println('gpio_$name counter: $counter')
@@ -392,9 +403,9 @@ fn main() {
         mut gpio_19 := gpio.get_pin('19')
         mut gpio_5 := gpio.get_pin('5')
         gpio_19.set_direction(true)
-        gpio_19.set_direction(true)
+        gpio_26.set_direction(true)
         gpio_5.set_direction(true)
-        go always_read(gpio_5, '5')
+        //go always_read(gpio_5, '5')
         go always_read(gpio_19, '19')
         go always_read(gpio_26, '26')
         gpio_26.set_direction(true)
@@ -424,7 +435,7 @@ fn main() {
                                 temp_int = 0
                                 temp_bool = !temp_bool
                         }
-                        if gpio_19.read() == 1 {
+                        if gpio_5.read() == 0 {
                                 game_state = 1
                         }
                 }
@@ -436,7 +447,7 @@ fn main() {
                                 blocks_position++
                                 change_sprite = !change_sprite
                         }
-                        if gpio_26.read() == 1 {
+                        if gpio_5.read() == 0 {
                                 player_y = true/* still needs verify gravity */
 
                                 time_in_air = time.ticks()
@@ -453,15 +464,15 @@ fn main() {
                         if blocks_position == 14 && !player_y {
                                 game_state = 2
                         }
-                        else {
-                                /* main game logic */
-                                lcd.clear_display()
-                                draw_block(mut lcd, blocks_size, blocks_position)
-                                draw_character(mut lcd, player_y, change_sprite)
-                        }
+                
+                        /* main game logic */
+                        lcd.clear_display()
+                        draw_block(mut lcd, blocks_size, blocks_position)
+                        draw_character(mut lcd, player_y, change_sprite)
+                
                 }
                 else if game_state == 2 {
-                        if gpio_19.read() == 1 {
+                        if gpio_5.read() == 0 {
                                 game_state = 1
                         }
                 }
