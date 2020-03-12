@@ -11,7 +11,7 @@ fn number_conversor(index int) []int {
                 [0, 0, 1, 1, 0, 0, 0, 0], [0, 0, 1, 1, 0, 0, 0, 1],
                 [0, 0, 1, 1, 0, 0, 1, 0], [0, 0, 1, 1, 0, 0, 1, 1],
                 [0, 0, 1, 1, 0, 1, 0, 0], [0, 0, 1, 1, 0, 1, 0, 1],
-                [0, 0, 1, 1, 0, 1, 1, 1], [0, 0, 1, 1, 0, 1, 1, 1],
+                [0, 0, 1, 1, 0, 1, 1, 0], [0, 0, 1, 1, 0, 1, 1, 1],
                 [0, 0, 1, 1, 1, 0, 0, 0], [0, 0, 1, 1, 1, 0, 0, 1]
         ]/* each position means the number on hexadecimal */
 
@@ -139,196 +139,133 @@ fn create_character(lcd mut rpi_gpio.Lcd) {
         /*Addres Code - 40 */
         lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(0, 0, 0, 0, 0, 0)
+        
         /*Draw first line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 1, 1, 1, 0)
+        
         /*Addres Code - 41 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
-        lcd.instruction_4bit(0, 0, 0, 0, 0, 1)
         /*Draw second line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 1, 1, 1, 0)
+        
         /*Addres Code - 42 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
-        lcd.instruction_4bit(0, 0, 0, 0, 1, 0)
         /*Draw third line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
+        
         /*Addres Code - 43 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
-        lcd.instruction_4bit(0, 0, 0, 0, 1, 1)
         /*Draw forth line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 1, 1, 0, 0)
+        
         /*Addres Code - 44 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
         /*Draw fifth line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 0)
+        
         /*Addres Code - 45 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
-        lcd.instruction_4bit(0, 0, 1, 0, 0, 1)
         /*Draw sixth line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 1)
+        
         /*Addres Code - 46 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
-        lcd.instruction_4bit(0, 0, 0, 1, 1, 0)
         /*Draw seventh line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
         lcd.instruction_4bit(1, 0, 1, 0, 1, 0)
+        
         /*Addres Code - 47 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
-        lcd.instruction_4bit(0, 0, 0, 1, 1, 1)
         /*Draw eighth line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
         lcd.instruction_4bit(1, 0, 1, 0, 1, 0)
+        
+        
         /*Jumping */
 
         /*Addres Code - 48 */
-
         lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
         lcd.instruction_4bit(0, 0, 1, 0, 0, 0)
+
         /*Draw first line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 1, 1, 1, 0)
+        
         /*Addres Code - 49 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
-        lcd.instruction_4bit(0, 0, 1, 0, 0, 1)
         /*Draw second line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 1, 1, 1, 0)
+
         /*Addres Code - 50 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
-        lcd.instruction_4bit(0, 0, 0, 0, 0, 0)
         /*Draw third line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
+
         /*Addres Code - 51 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
-        lcd.instruction_4bit(0, 0, 0, 0, 0, 1)
         /*Draw forth line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 1, 1, 1, 0)
+
         /*Addres Code - 52 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
-        lcd.instruction_4bit(0, 0, 0, 0, 1, 0)
         /*Draw fifth line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 1)
+
         /*Addres Code - 53 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
-        lcd.instruction_4bit(0, 0, 0, 0, 1, 1)
         /*Draw sixth line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
+
         /*Addres Code - 54 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 0)
         /*Draw seventh line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 1, 0, 1, 0)
+
         /*Addres Code - 55 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
         /*Draw eighth line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
+
         /*WALKING 2 */
 
         /*Addres Code - 56 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
-        lcd.instruction_4bit(0, 0, 0, 1, 1, 0)
+        //lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
+        //lcd.instruction_4bit(0, 0, 0, 1, 1, 0)
         /*Draw first line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 1, 1, 1, 0)
+
         /*Addres Code - 57 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
-        lcd.instruction_4bit(0, 0, 0, 1, 1, 1)
         /*Draw second line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 1, 1, 1, 0)
+
         /*Addres Code - 58 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
-        lcd.instruction_4bit(0, 0, 1, 0, 0, 0)
         /*Draw third line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
+
         /*Addres Code - 59 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 0, 1)
-        lcd.instruction_4bit(0, 0, 1, 0, 0, 1)
         /*Draw forth line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 0)
+
         /*Addres Code - 60 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 1, 0)
-        lcd.instruction_4bit(0, 0, 0, 0, 0, 0)
         /*Draw fifth line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 1, 0)
+
         /*Addres Code - 61 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 1, 0)
-        lcd.instruction_4bit(0, 0, 0, 0, 0, 1)
         /*Draw sixth line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 0, 1, 0, 0)
+
         /*Addres Code - 62 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 1, 0)
-        lcd.instruction_4bit(0, 0, 0, 0, 1, 0)
         /*Draw seventh line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 0)
         lcd.instruction_4bit(1, 0, 1, 0, 1, 0)
+
         /*Addres Code - 63 */
-
-        lcd.instruction_4bit(0, 0, 0, 1, 1, 0)
-        lcd.instruction_4bit(0, 0, 0, 0, 1, 1)
         /*Draw eighth line for CGRAM */
-
         lcd.instruction_4bit(1, 0, 0, 0, 0, 1)
         lcd.instruction_4bit(1, 0, 0, 0, 1, 0)
 }
@@ -405,11 +342,12 @@ fn main() {
         gpio_19.set_direction(true)
         gpio_26.set_direction(true)
         gpio_5.set_direction(true)
-        //go always_read(gpio_5, '5')
+        go always_read(gpio_5, '5')
         go always_read(gpio_19, '19')
         go always_read(gpio_26, '26')
         gpio_26.set_direction(true)
         gpio_19.set_direction(true)
+        mut on_air := 0
         mut previous_tick := time.ticks()
         mut score := 0
         mut player_y := false
@@ -422,6 +360,8 @@ fn main() {
         mut temp_bool := false
         mut paused := false
         mut pause_pressed := false
+        mut button_pressed := false
+        mut on_floor := false
         for {
                 if game_state == 0 {
                         if score_counter(previous_tick) {
@@ -442,12 +382,17 @@ fn main() {
                         }
                 }
                 else if game_state == 1 {
+                        if gpio_5.read() == 0 && !on_floor {
+                                button_pressed = true
+                                on_floor = false
+                        }
                         temp_bool = gpio_19.read() == 0
                         if temp_bool && temp_bool != pause_pressed {
                                 paused = !paused
                         }
                         pause_pressed = temp_bool
                         if !paused {
+                                on_air--
                                 if score_counter(previous_tick) {
                                         score++
                                         if score > 99 {
@@ -457,12 +402,15 @@ fn main() {
                                         blocks_position++
                                         change_sprite = !change_sprite
                                 }
-                                if gpio_5.read() == 0 {
+                                if button_pressed && on_air <= 0{
                                         player_y = true/* still needs verify gravity */
                                         time_in_air = time.ticks()
+                                        on_air = 6
+                                        on_floor = true
                                 }
-                                if player_y && time.ticks() - time_in_air > 140 {
+                                if on_air == 0 && time.ticks() - time_in_air > 140 {
                                         /* gravity */
+                                        on_air--
                                         time_in_air = 0
                                         player_y = false
                                 }
@@ -474,6 +422,12 @@ fn main() {
                                         game_state = 0
                                         score = 0
                                 }
+                                if gpio_26.read() == 0 {
+                                        game_state = 0
+                                }
+                                if on_air < 0 {
+                                        on_floor = false
+                                }
                         }
                         /* main game logic */
                         lcd.clear_display()
@@ -481,6 +435,9 @@ fn main() {
                         draw_character(mut lcd, player_y, change_sprite)
                         draw_block(mut lcd, blocks_size, blocks_position)
                         time.sleep_ms(300)
+                        if on_air > 0{
+                                button_pressed = false
+                        }
                 }
                 else if game_state == 2 {
                         if gpio_5.read() == 0 {
